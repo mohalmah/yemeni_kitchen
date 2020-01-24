@@ -1,17 +1,29 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:yemeni_kitchen/viewmodels/recipe_viewmodel_ar.dart';
 import 'package:yemeni_kitchen/viewmodels/recipe_viewmodel.dart';
-//import 'package:yemeni_kitchen/pages/home_pagear.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:yemeni_kitchen/pages/home_page_ar.dart';
 class HomePage extends StatefulWidget {
   @override
   State createState() => HomePageState();
 }
 
+_launchURL() async {
+  const url = 'https://flutter.io';
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 class HomePageState extends State<HomePage> {
   bool displayText;
   bool selectedIngredients;
   bool selectedInstructions;
   bool selectedInfo;
+  bool selectedVideo;
 
   @override
   void initState() {
@@ -19,6 +31,7 @@ class HomePageState extends State<HomePage> {
     selectedIngredients = false;
     selectedInstructions = false;
     selectedInfo = false;
+    selectedVideo = false;
     super.initState();
   }
 
@@ -142,7 +155,19 @@ class HomePageState extends State<HomePage> {
                     });
                   },
                 )),
+                Padding(
+                    padding: EdgeInsets.only(top: 16.0),
+                    child: frostedIconButton(IconButton(
+                        icon: Icon(Icons.video_label,
+                            color: selectedVideo ? Colors.white : Colors.white70),
+                        onPressed: () async {
+                          String url = RecipeViewModelAr.selected.sourceUrl;
+                          if(await canLaunch(url))
+                            await launch(url);
+                          print(RecipeViewModelAr.selected.sourceUrl);
+                        }
 
+                    ))),
                 Padding(
                     padding: EdgeInsets.only(bottom: 16.0, top:16.0),
                     child: frostedIconButton(IconButton(
@@ -168,20 +193,11 @@ class HomePageState extends State<HomePage> {
                     icon: Icon(Icons.text_format,
                         color:
                         selectedInstructions ? Colors.white : Colors.white70),
-                    onPressed: (){
-                      setState(() {
-                        if (displayText) {
-                          displayText = false;
-                        }
-                        if (selectedInstructions) {
-                          displayText = true;
-                          selectedInstructions = false;
-                        } else {
-                          selectedIngredients = false;
-                          selectedInstructions = true;
-                          selectedInfo = false;
-                        }
-                      });
+                    onPressed: () async {
+                      await RecipeViewModelAr.load();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePageAr()));
                     },
                   )),
 

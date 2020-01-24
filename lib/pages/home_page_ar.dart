@@ -1,9 +1,13 @@
-//import 'dart:io';
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:yemeni_kitchen/viewmodels/recipe_viewmodel_ar.dart';
+import 'package:yemeni_kitchen/pages/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
-//import 'dart:io' show Platform;
+import 'package:ads/ads.dart';
+import 'dart:io' show Platform;
+import 'package:yemeni_kitchen/viewmodels/recipe_viewmodel.dart';
+
 
 //import 'package:ads/ads.dart';
 
@@ -26,7 +30,7 @@ _launchURL() async {
 }
 class HomePageState extends State<HomePageAr> {
   TextEditingController editingController = TextEditingController();
- /* Ads appAds;
+  Ads appAds;
   int _coins = 0;
 
   final String appId = Platform.isAndroid
@@ -43,7 +47,7 @@ class HomePageState extends State<HomePageAr> {
 
   final String videoUnitId = Platform.isAndroid
       ? 'ca-app-pub-3940256099942544/5224354917'
-      : 'ca-app-pub-3940256099942544/1712485313';*/
+      : 'ca-app-pub-3940256099942544/1712485313';
 
   bool displayText;
   bool selectedIngredients;
@@ -61,7 +65,7 @@ class HomePageState extends State<HomePageAr> {
     selectedVideo = false;
 
     super.initState();
-  /*  appAds = Ads(
+  appAds = Ads(
       appId,
       bannerUnitId: bannerUnitId,
       screenUnitId: screenUnitId,
@@ -71,7 +75,7 @@ class HomePageState extends State<HomePageAr> {
       // testDevices: ['1ADC12C31E92846D6F312828AE8B6249'],
       testing: true,
 
-    );*/
+    );
     //appAds.showBannerAd();
   }
 
@@ -219,7 +223,7 @@ class HomePageState extends State<HomePageAr> {
                                     color: selectedVideo ? Colors.white : Colors.white70),
                                 onPressed: () async {
                                   String url = RecipeViewModelAr.selected.sourceUrl;
-                                  if(await canLaunch(url))
+                                 if(await canLaunch(url))
                                     await launch(url);
                                   print(RecipeViewModelAr.selected.sourceUrl);
                                 }
@@ -246,6 +250,22 @@ class HomePageState extends State<HomePageAr> {
                                   }
                                 });
                               },
+                            ))),
+                        Padding(
+                            padding: EdgeInsets.only(top: 16.0),
+                            child: frostedIconButton(IconButton(
+                                icon: Icon(Icons.text_format,
+                                    color: selectedVideo ? Colors.white : Colors.white70),
+                                onPressed: () async {
+                                  String url = RecipeViewModelAr.selected.sourceUrl;
+
+                                  print(RecipeViewModelAr.selected.sourceUrl);
+                                  await RecipeViewModel.load();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => HomePage()));
+                                }
+
                             ))),
                         Spacer(),
 
@@ -544,9 +564,10 @@ class HomePageState extends State<HomePageAr> {
                         ])
                   ])))),
       onTap: () {
-       // appAds.showFullScreenAd(state: this);
+
         setState(() {
           RecipeViewModelAr.selected = RecipeViewModelAr.recipes[index];
+         // appAds.showFullScreenAd(state: this);
         });
       },
     );

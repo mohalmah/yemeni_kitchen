@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  ads: ^1.0.0
   flutter:
     sdk: flutter
 
@@ -44,6 +45,7 @@ flutter:
 
   assets:
     - recipes.json
+    - recipesar.json
     - assets/1001.jpg
     - assets/1002.jpg
     - assets/1003.jpg
